@@ -717,14 +717,20 @@ async function main() {
     logSuccess(
       `Successfully published @dartfx/n8n-nodes-qsv@${newPkgVersion} under tag '${publishTag}'!`,
     );
+  } else if (options.push) {
+    console.log(`
+\x1b[32m✔ Release v${newPkgVersion} dispatched successfully!\x1b[0m
+
+GitHub Actions has been triggered by tag v${newPkgVersion}:
+  Track progress at: https://github.com/DataArtifex/dartfx-n8n-nodes-qsv/actions
+`);
   } else {
     log("\n\x1b[32m✔ Release preparation complete!\x1b[0m");
     console.log(`
 Next steps:
   1. Review changes:        git status && git diff
-  2. To publish to staging: pnpm publish --tag staging --access public --no-git-checks
-  3. To publish to latest:  pnpm publish --tag latest --access public
-  4. Or push git tags:      git push origin main --follow-tags
+  2. To publish to staging: pnpm run release:staging --otp <code>
+  3. To release to GitHub:  git push origin main --follow-tags
 `);
   }
 }
