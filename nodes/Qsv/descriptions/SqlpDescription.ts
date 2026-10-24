@@ -109,8 +109,8 @@ export const SqlpDescription: INodeProperties[] = [
       displayName: 'Delimiter',
       name: 'delimiter',
       type: 'string',
-      default: ',',
-      description: 'The field delimiter for reading and writing CSV data. Must be a single character.',
+      default: '',
+      description: 'The field delimiter for reading and writing CSV data. Must be a single character. (default: ,)',
     },
     {
       displayName: 'Float Precision',
@@ -141,13 +141,6 @@ export const SqlpDescription: INodeProperties[] = [
       description: 'The number of rows to scan when inferring the schema of the CSV. Set to 0 to do a full table scan (warning: can be slow).',
     },
     {
-      displayName: 'Low Memory',
-      name: 'lowMemory',
-      type: 'boolean',
-      default: false,
-      description: 'Use low memory mode when parsing CSVs. This will use less memory but will be slower. Only use this when you get out of memory errors.',
-    },
-    {
       displayName: 'No Optimizations',
       name: 'noOptimizations',
       type: 'boolean',
@@ -173,7 +166,7 @@ export const SqlpDescription: INodeProperties[] = [
       name: 'streaming',
       type: 'boolean',
       default: false,
-      description: 'Use streaming mode when parsing CSVs. This will use less memory but will be slower. Only use this when you get out of memory errors.',
+      description: 'Write the query result as it is computed, batch by batch, instead of collecting the whole result in memory first. Use this when the result is too big for memory. Works with the csv, jsonl, parquet and arrow formats; json and avro output still collect the whole result. Queries already run on Polars\' streaming engine either way. An --output file is written beside its target and only moved into place if the query succeeds. Overwriting an existing file copies the result into it, so it keeps its owner, group, mode and links; that briefly needs disk space for two copies. On stdout, rows are sent as they are computed, so a query that fails part-way leaves its output cut short; check sqlp\'s exit code before using it.',
     },
     {
       displayName: 'Time Format',

@@ -1,6 +1,6 @@
 {
   "name": "@dartfx/n8n-nodes-qsv",
-  "version": "0.2.1",
+  "version": "0.26.0",
   "description": "n8n community node for datHere QSV ultra-fast tabular data wrangling, stats, and transformations (requires 'qsv' CLI on host)",
   "keywords": [
     "n8n-community-node-package",
@@ -35,6 +35,11 @@
     "build": "tsc && gulp build:icons",
     "dev": "tsc --watch",
     "generate:qsv": "tsx scripts/generate-qsv-nodes.ts",
+    "sync:qsv": "tsx scripts/sync-qsv-release.ts --local --align-minor",
+    "sync:qsv:upstream": "tsx scripts/sync-qsv-release.ts --align-minor",
+    "sync:qsv:check": "tsx scripts/sync-qsv-release.ts --check-only",
+    "release:staging": "tsx scripts/sync-qsv-release.ts --local --align-minor --staging --publish",
+    "release:prod": "tsx scripts/sync-qsv-release.ts --local --align-minor --git-tag --push",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",
     "lint": "eslint \"**/*.ts\"",
     "test": "jest --passWithNoTests",
@@ -65,5 +70,6 @@
     "ts-jest": "^29.2.5",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3"
-  }
+  },
+  "qsvVersion": "26.0.0"
 }

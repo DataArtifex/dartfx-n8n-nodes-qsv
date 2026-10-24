@@ -43,11 +43,17 @@ export async function executeGeocode(
   if (options.batch !== undefined && options.batch !== '') {
     args.push('--batch', String(options.batch));
   }
+  if (options.benchmark !== undefined && options.benchmark !== '') {
+    args.push('--benchmark', String(options.benchmark));
+  }
   if (options.cacheDir !== undefined && options.cacheDir !== '') {
     args.push('--cache-dir', String(options.cacheDir));
   }
   if (options.cacheTtl !== undefined && options.cacheTtl !== '') {
     args.push('--cache-ttl', String(options.cacheTtl));
+  }
+  if (options.censusMode !== undefined && options.censusMode !== '') {
+    args.push('--census-mode', String(options.censusMode));
   }
   if (options.citiesUrl !== undefined && options.citiesUrl !== '') {
     args.push('--cities-url', String(options.citiesUrl));
@@ -57,6 +63,9 @@ export async function executeGeocode(
   }
   if (options.delimiter !== undefined && options.delimiter !== '') {
     args.push('--delimiter', String(options.delimiter));
+  }
+  if (options.endpoint !== undefined && options.endpoint !== '') {
+    args.push('--endpoint', String(options.endpoint));
   }
   if (options.force === true) {
     args.push('--force');
@@ -91,6 +100,9 @@ export async function executeGeocode(
   if (options.olderThan !== undefined && options.olderThan !== '') {
     args.push('--older-than', String(options.olderThan));
   }
+  if (options.params !== undefined && options.params !== '') {
+    args.push('--params', String(options.params));
+  }
   if (options.rateLimit !== undefined && options.rateLimit !== '') {
     args.push('--rate-limit', String(options.rateLimit));
   }
@@ -102,6 +114,9 @@ export async function executeGeocode(
   }
   if (options.timeout !== undefined && options.timeout !== '') {
     args.push('--timeout', String(options.timeout));
+  }
+  if (options.vintage !== undefined && options.vintage !== '') {
+    args.push('--vintage', String(options.vintage));
   }
   if (additionalArgs.trim()) {
     const rawMatches = additionalArgs.match(/[^\s"']+|"[^"]*"|'[^']*'/g) || [];

@@ -68,7 +68,7 @@ export const PivotpDescription: INodeProperties[] = [
       name: 'agg',
       type: 'string',
       default: 'smart',
-      description: 'The aggregation function to use: first - First value encountered last - Last value encountered sum - Sum of values min - Minimum value max - Maximum value mean - Average value median - Median value quantile@<p> - Quantile at probability p in [0, 1] using linear interpolation. Alias: q@<p>. Examples: quantile@0.95, q@0.5 (q@0.5 is equivalent to median for even-length groups). len - Count of values item - Get single value from group. Raises error if there are multiple values. smart - use value column data type & statistics to pick an aggregation. Always uses type, cardinality, sparsity, CV, sign distribution (n_negative/n_positive), and sort_order from streaming stats. When the stats cache includes non-streaming stats (from a prior `stats --everything` or `stats --mode --quartiles`), also uses skewness and mode_count. When moarstats has been run, also leverages outlier profile, Pearson skewness, MAD/stddev ratio, median/mean ratio, and quartile coefficient of dispersion for smarter selection. With moarstats --advanced, also uses kurtosis, bimodality (bimodality coefficient >= 0.555 with negative excess kurtosis), entropy and Gini coefficient. For Date/DateTime values, checks sparsity and sort order. Will only work if there is one value column, otherwise it falls back to `first`',
+      description: 'The aggregation function to use: first - First value encountered last - Last value encountered sum - Sum of values min - Minimum value max - Maximum value mean - Average value median - Median value quantile@<p> - Quantile at probability p in [0, 1] using linear interpolation. Alias: q@<p>. Examples: quantile@0.95, q@0.5 (q@0.5 is equivalent to median for even-length groups). len - Count of values item - Get single value from group. Raises error if there are multiple values. smart - use value column data type & statistics to pick an aggregation. Always uses type, cardinality, sparsity, CV, sign distribution (n_negative/n_positive), and sort_order from streaming stats. High variability means a CV above 100% (stddev > mean). When the stats cache includes non-streaming stats (from a prior `stats --everything` or `stats --mode`), also uses mode_count. With a single --values column, smart first runs moarstats --advanced to enrich the input\'s stats cache (writing <stem>.stats.csv, .stats.csv.json and .stats.csv.data.jsonl beside it) unless the cache already has those stats. This one-time pass reads the whole file; skip it with --no-moarstats. It is also skipped with an explicit --delimiter, stdin and special formats. The moarstats stats used are outlier profile, Pearson skewness, MAD/stddev ratio, median/mean ratio and quartile coefficient of dispersion (the two ratios only for positive data), moment skewness (|G1| >= 1 picks median; Pearson skewness is the fallback), kurtosis, bimodality (bimodality coefficient >= 0.60 with negative excess kurtosis), entropy and Gini coefficient. A single-value column uses first. The choice depends on the data, so pass an explicit --agg to pin a result across qsv versions. For Date/DateTime values, checks sparsity and sort order. Will only work if there is one value column, otherwise it falls back to `first`',
     },
     {
       displayName: 'Col Separator',
@@ -89,7 +89,7 @@ export const PivotpDescription: INodeProperties[] = [
       name: 'delimiter',
       type: 'string',
       default: '',
-      description: 'The field delimiter for reading/writing CSV data. Must be a single character. (default: ,)',
+      description: 'The field delimiter for reading/writing CSV data. Must be a single character. If not set, QSV_DEFAULT_DELIMITER is used, else \',\'. A .tsv/.tab (tab) or .ssv (semicolon) extension on the input or --output file sets that file\'s delimiter. (default: ,)',
     },
     {
       displayName: 'Grand Total',
@@ -124,7 +124,7 @@ export const PivotpDescription: INodeProperties[] = [
       name: 'maintainOrder',
       type: 'boolean',
       default: false,
-      description: 'Maintain output order: preserve input column order in pivot mode, and preserve group/row order in group-by mode.',
+      description: 'Accepted for compatibility. Output is always in first-appearance order: rows follow their index values\' first appearance and pivoted columns their <on-cols> values\' first appearance.',
     },
     {
       displayName: 'Max Columns',
@@ -132,6 +132,13 @@ export const PivotpDescription: INodeProperties[] = [
       type: 'number',
       default: 100000,
       description: 'Maximum number of columns the pivot may create before it is refused. Guards against pivoting on a high-cardinality column, which can exhaust memory. Unlike --validate, this ALWAYS runs. Set to 0 for no limit, for a deliberately wide pivot. (pivot mode only; ignored in group-by mode)',
+    },
+    {
+      displayName: 'No Moarstats',
+      name: 'noMoarstats',
+      type: 'boolean',
+      default: false,
+      description: 'For smart aggregation, do not run moarstats --advanced to enrich the stats cache. Smart aggregation then uses whatever stats are already cached (or basic `stats --cardinality` stats).',
     },
     {
       displayName: 'Sort Columns',

@@ -171,7 +171,7 @@ export const ValidateDescription: INodeProperties[] = [
       name: 'noFormatValidation',
       type: 'boolean',
       default: false,
-      description: 'Disable JSON Schema format validation. Ignores all JSON Schema "format" keywords (e.g. date,email, uri, currency, etc.). This is useful when you want to validate the structure of the CSV file w/o worrying about the data types and domain/range of the fields.',
+      description: 'Disable JSON Schema format validation. Ignores all JSON Schema "format" keywords (e.g. date,email, uri, currency, etc.). This is useful when you want to validate the structure of the CSV file w/o worrying about the data types and domain/range of the fields. Without this option, a "format" that qsv does not know (e.g. a typo like "emial") is not checked, and a warning names it.',
     },
     {
       displayName: 'No Headers',
@@ -179,6 +179,13 @@ export const ValidateDescription: INodeProperties[] = [
       type: 'boolean',
       default: false,
       description: 'When set, the first row will not be interpreted as headers. It will be validated with the rest of the rows. Otherwise, the first row will always appear as the header row in the output. Note that this option is only valid when running in RFC 4180 validation mode as JSON Schema validation requires headers.',
+    },
+    {
+      displayName: 'Offline',
+      name: 'offline',
+      type: 'boolean',
+      default: false,
+      description: 'Do not resolve "$ref"s to schemas outside the JSON Schema file, whether they are URLs or local files; a schema that has them fails to compile. Use this with JSON Schemas you do not trust. The JSON Schema file itself and dynamicEnum lookups are still loaded as usual.',
     },
     {
       displayName: 'Pretty Json',
@@ -199,7 +206,7 @@ export const ValidateDescription: INodeProperties[] = [
       name: 'splitRagged',
       type: 'boolean',
       default: false,
-      description: 'Opt-in mode: instead of aborting on the first row with the wrong number of columns (a "ragged" row), write well-formed rows to the \'<input>.<valid>\' file and the ragged rows to the \'<input>.<invalid>\' file, with a report appended to \'<input>.validation-errors.tsv\'. Returns a non-zero exit code when any ragged row is found. Only column-count mismatches are diverted; malformed quoting and non-UTF-8 data still abort validation. Works in both RFC 4180 and JSON Schema validation modes. The split files are written next to each input file, so this is intended for on-disk file input(s).',
+      description: 'Opt-in mode: instead of aborting on the first row with the wrong number of columns (a "ragged" row), write well-formed rows to the \'<input>.<valid>\' file and the ragged rows to the \'<input>.<invalid>\' file, with a report appended to \'<input>.validation-errors.tsv\'. Returns a non-zero exit code when any ragged row is found. Only column-count mismatches are diverted; malformed quoting and non-UTF-8 data still abort validation. Works in both RFC 4180 and JSON Schema validation modes. The split files are written next to each input file, so this is intended for on-disk file input(s). A compressed input keeps its full name (data.csv.sz.valid). In RFC 4180 mode, which checks every entry in a zip archive, an entry is named for both (data.zip.data.csv.valid; data.zip.sub/x.csv.valid for an entry in a folder). Piped stdin\'s are \'stdin.csv.*\' in the current directory. If any split file would be written twice, or would overwrite an input, nothing is written.',
     },
     {
       displayName: 'Timeout',

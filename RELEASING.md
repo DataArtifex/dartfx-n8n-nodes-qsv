@@ -29,6 +29,62 @@ Follow [Semantic Versioning 2.0.0](https://semver.org/):
 | **Minor** | `0.1.0` $\rightarrow$ `0.2.0` | Backward-compatible features, new node commands or properties. |
 | **Major** | `0.1.0` $\rightarrow$ `1.0.0` | Breaking changes to node properties, schemas, or engine requirements. |
 
+### Upstream QSV Version Alignment vs. Decoupled SemVer
+
+A common question when maintaining wrappers and community nodes is: **How should the npm package version reflect QSV's version (currently `26.0.0`)?**
+
+#### 🌟 Recommended Middle Ground: Align on Minor Version (`0.<QSV_MAJOR>.<PATCH>`, e.g. `0.26.0`)
+Aligning the **minor version** to QSV's major version is an elegant, highly effective strategy:
+- **Instant Recognition**: Users and developers immediately see that `@dartfx/n8n-nodes-qsv@0.26.0` corresponds to **QSV 26**.
+- **Reserved Patch Channel for Node Fixes**: The patch number (`0.26.1`, `0.26.2`, etc.) remains available for independent node bug fixes, UI improvements, or dependency patches without colliding with QSV releases.
+- **Natural Cadence**: When QSV releases `27.0.0`, the package transitions to `0.27.0`.
+
+#### Comparison of Versioning Strategies:
+| Strategy | Example | Pros | Considerations |
+| :--- | :--- | :--- | :--- |
+| **Minor Alignment (Recommended)** | `0.26.0` $\rightarrow$ `0.26.1` | Instant visual match with QSV 26; preserves patch digit for independent node maintenance. | Operates in SemVer `0.x` pre-1.0 series. |
+| **Strict Upstream Mirror** | `26.0.0` | Exact 1:1 match with upstream CLI. | Skips 25 major versions; node-only bug fixes risk colliding with upstream patch numbers. |
+| **Fully Decoupled SemVer** | `0.3.0` | Pure independent SemVer tracking. | Requires checking README / metadata to know which QSV version is targeted. |
+
+---
+
+## ⚡ Automated QSV Synchronization & Release Script
+
+The project provides an automated tool (`scripts/sync-qsv-release.ts` / `pnpm run sync:qsv`) to synchronize node definitions with QSV, compile, test, and release.
+
+### Workflow 1: Using your Locally Compiled QSV Binary (Default)
+If you clone QSV from GitHub and build the binary locally on your machine (`cargo build --release`):
+
+```bash
+# 1. Preview changes and build in dry-run mode (zero risk):
+pnpm run sync:qsv --dry-run
+
+# 2. Publish to npm staging channel for live n8n testing (requires OTP):
+pnpm run release:staging --otp 123456
+
+# 3. Production Release (Single Unified Path via GitHub Actions):
+# Regenerates, runs QA, commits, creates tag v0.26.0, and pushes to GitHub:
+pnpm run release:prod
+# -> GitHub Actions triggers on the tag, builds on a clean runner, and publishes
+#    to npm with cryptographic provenance attestation via OIDC (zero duplicate attempts).
+```
+
+> [!TIP]
+> **Why `--otp <code>` is recommended:**
+> Modern npm accounts enforce Two-Factor Authentication (2FA) for write operations. When publishing from a terminal script, web-based authentication (`https://www.npmjs.com/auth/cli/...`) can get stuck waiting for TTY carriage returns.
+> Passing `--otp 123456` with your 6-digit authenticator code (from 1Password, Google Authenticator, etc.) directly satisfies npm's 2FA and publishes in seconds without opening a browser.
+
+### Workflow 2: Synchronizing from Upstream GitHub Releases
+If you want the tool to automatically check and fetch pre-built release assets from GitHub:
+
+```bash
+# Check if a newer upstream release exists:
+pnpm run sync:qsv:check
+
+# Synchronize against upstream release:
+pnpm run sync:qsv:upstream --dry-run
+```
+
 ---
 
 ## 🧪 Staging Deployment Workflow (Pre-Release Testing)

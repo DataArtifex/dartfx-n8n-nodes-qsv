@@ -37,12 +37,12 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ runner.os == 'Windows' && 'C:\qsv' || '/usr/local/bin/qsv' }}
-          key: qsv-bin-${{ runner.os }}-${{ runner.arch }}-v24.0.0
+          key: qsv-bin-${{ runner.os }}-${{ runner.arch }}-v26.0.0
 
       - name: Install QSV binary (Linux)
         if: runner.os == 'Linux' && steps.cache-qsv.outputs.cache-hit != 'true'
         run: |
-          curl -fsSL https://github.com/dathere/qsv/releases/download/24.0.0/qsv-24.0.0-x86_64-unknown-linux-musl.zip -o /tmp/qsv.zip
+          curl -fsSL https://github.com/dathere/qsv/releases/download/26.0.0/qsv-26.0.0-x86_64-unknown-linux-musl.zip -o /tmp/qsv.zip
           sudo unzip -o /tmp/qsv.zip qsv -d /usr/local/bin/
           sudo chmod +x /usr/local/bin/qsv
           rm -f /tmp/qsv.zip
@@ -52,7 +52,7 @@ jobs:
         run: |
           ARCH=$(uname -m)
           if [ "$ARCH" = "arm64" ]; then QSV_ARCH="aarch64-apple-darwin"; else QSV_ARCH="x86_64-apple-darwin"; fi
-          curl -fsSL "https://github.com/dathere/qsv/releases/download/24.0.0/qsv-24.0.0-${QSV_ARCH}.zip" -o /tmp/qsv.zip
+          curl -fsSL "https://github.com/dathere/qsv/releases/download/26.0.0/qsv-26.0.0-${QSV_ARCH}.zip" -o /tmp/qsv.zip
           sudo unzip -o /tmp/qsv.zip qsv -d /usr/local/bin/
           sudo chmod +x /usr/local/bin/qsv
           rm -f /tmp/qsv.zip
@@ -62,7 +62,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path C:\qsv
-          Invoke-WebRequest -Uri "https://github.com/dathere/qsv/releases/download/24.0.0/qsv-24.0.0-x86_64-pc-windows-msvc.zip" -OutFile C:\qsv\qsv.zip
+          Invoke-WebRequest -Uri "https://github.com/dathere/qsv/releases/download/26.0.0/qsv-26.0.0-x86_64-pc-windows-msvc.zip" -OutFile C:\qsv\qsv.zip
           Expand-Archive -Path C:\qsv\qsv.zip -DestinationPath C:\qsv -Force
           Remove-Item C:\qsv\qsv.zip
 

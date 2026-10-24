@@ -54,6 +54,9 @@ export async function executePivotp(
   if (options.maxColumns !== undefined && options.maxColumns !== '') {
     args.push('--max-columns', String(options.maxColumns));
   }
+  if (options.noMoarstats === true) {
+    args.push('--no-moarstats');
+  }
   if (options.sortColumns === true) {
     args.push('--sort-columns');
   }

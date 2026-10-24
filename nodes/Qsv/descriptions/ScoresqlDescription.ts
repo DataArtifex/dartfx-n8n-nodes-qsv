@@ -67,8 +67,8 @@ export const ScoresqlDescription: INodeProperties[] = [
       displayName: 'Delimiter',
       name: 'delimiter',
       type: 'string',
-      default: ',',
-      description: 'The field delimiter for reading CSV data. Must be a single character.',
+      default: '',
+      description: 'The field delimiter for reading CSV data. Must be a single character. (default: ,)',
     },
     {
       displayName: 'Duckdb',

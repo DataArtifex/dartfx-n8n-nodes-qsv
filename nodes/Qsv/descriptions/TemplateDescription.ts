@@ -95,8 +95,8 @@ export const TemplateDescription: INodeProperties[] = [
       displayName: 'Delimiter',
       name: 'delimiter',
       type: 'string',
-      default: ',',
-      description: 'Field separator for reading CSV',
+      default: '',
+      description: 'Field separator for reading CSV (default: ,)',
     },
     {
       displayName: 'Globals Json',

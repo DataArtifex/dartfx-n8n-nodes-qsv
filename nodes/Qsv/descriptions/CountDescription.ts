@@ -44,8 +44,8 @@ export const CountDescription: INodeProperties[] = [
       displayName: 'Delimiter',
       name: 'delimiter',
       type: 'string',
-      default: ',',
-      description: 'The delimiter to use when reading CSV data. Must be a single character.',
+      default: '',
+      description: 'The field delimiter for reading CSV data. Must be a single character. (default: ,)',
     },
     {
       displayName: 'Flexible',
@@ -67,13 +67,6 @@ export const CountDescription: INodeProperties[] = [
       type: 'boolean',
       default: false,
       description: 'Output the width stats in JSON format.',
-    },
-    {
-      displayName: 'Low Memory',
-      name: 'lowMemory',
-      type: 'boolean',
-      default: false,
-      description: 'Use the Polars CSV Reader\'s low-memory mode. This mode is slower but uses less memory. If counting still fails, use --no-polars instead to use the streaming CSV reader.',
     },
     {
       displayName: 'No Headers',

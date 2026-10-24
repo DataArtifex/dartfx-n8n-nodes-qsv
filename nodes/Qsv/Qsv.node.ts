@@ -162,7 +162,7 @@ export class Qsv implements INodeType {
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"]}}',
-    description: 'Ultra-fast tabular data wrangling, stats, and transformations via QSV (generated for QSV 24.0.0; requires qsv CLI on host)',
+    description: 'Ultra-fast tabular data wrangling, stats, and transformations via QSV (generated for QSV 26.0.0; requires qsv CLI on host)',
     defaults: {
       name: 'QSV',
     },
@@ -334,7 +334,7 @@ export class Qsv implements INodeType {
           {
             name: 'Geocode (geocode) [Feature: geocode]',
             value: 'geocode',
-            description: 'Geocodes a location against an updatable local copy of the Geonames cities & the Maxmind GeoLite2 databases — with caching and multi-threading, this offline path geocodes up to 360,000 records/sec! Can also geocode online (forward & reverse) via the OpenCage geocoder. (Category: utility | Docs: https://github.com/dathere/qsv/blob/master/docs/help/geocode.md)',
+            description: 'Geocodes a location against an updatable local copy of the Geonames cities & the Maxmind GeoLite2 databases — with caching and multi-threading, this offline path geocodes up to 360,000 records/sec! Can also geocode online (forward & reverse) via the OpenCage geocoder, geocode New York City addresses, BBLs and BINs via NYC\'s Geoclient API, which also returns NYC attributes such as council districts and census tracts, and geocode US addresses & coordinates via the free US Census Geocoder - single or batch - returning Census state, county, tract, block group & block GEOIDs for Census data enrichment. (Category: utility | Docs: https://github.com/dathere/qsv/blob/master/docs/help/geocode.md)',
             action: 'Geocode',
           },
           {

@@ -40,6 +40,9 @@ export async function executeViz(
   if (options.annotation !== undefined && options.annotation !== '') {
     args.push('--annotation', String(options.annotation));
   }
+  if (options.area === true) {
+    args.push('--area');
+  }
   if (options.bins !== undefined && options.bins !== '') {
     args.push('--bins', String(options.bins));
   }
@@ -69,6 +72,9 @@ export async function executeViz(
   }
   if (options.datasetPid !== undefined && options.datasetPid !== '') {
     args.push('--dataset-pid', String(options.datasetPid));
+  }
+  if (options.degrees === true) {
+    args.push('--degrees');
   }
   if (options.delimiter !== undefined && options.delimiter !== '') {
     args.push('--delimiter', String(options.delimiter));
@@ -160,6 +166,9 @@ export async function executeViz(
   if (options.maxCharts !== undefined && options.maxCharts !== '') {
     args.push('--max-charts', String(options.maxCharts));
   }
+  if (options.noDaemonBridge === true) {
+    args.push('--no-daemon-bridge');
+  }
   if (options.noHeaders === true) {
     args.push('--no-headers');
   }
@@ -168,6 +177,9 @@ export async function executeViz(
   }
   if (options.noOther === true) {
     args.push('--no-other');
+  }
+  if (options.noParcoords === true) {
+    args.push('--no-parcoords');
   }
   if (options.noSnap === true) {
     args.push('--no-snap');

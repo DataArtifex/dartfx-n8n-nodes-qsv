@@ -78,7 +78,7 @@ export const ToDescription: INodeProperties[] = [
       name: 'allStrings',
       type: 'boolean',
       default: false,
-      description: 'Convert all fields to strings.',
+      description: 'Convert all fields to strings. For parquet, columns are read as strings without type inference, so the inference length and any pschema.json are not used.',
     },
     {
       displayName: 'Compress Level',

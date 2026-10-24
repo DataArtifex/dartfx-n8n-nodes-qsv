@@ -76,6 +76,9 @@ export async function executeValidate(
   if (options.noHeaders === true) {
     args.push('--no-headers');
   }
+  if (options.offline === true) {
+    args.push('--offline');
+  }
   if (options.prettyJson === true) {
     args.push('--pretty-json');
   }

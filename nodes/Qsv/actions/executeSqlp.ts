@@ -64,9 +64,6 @@ export async function executeSqlp(
   if (options.inferLen !== undefined && options.inferLen !== '') {
     args.push('--infer-len', String(options.inferLen));
   }
-  if (options.lowMemory === true) {
-    args.push('--low-memory');
-  }
   if (options.noOptimizations === true) {
     args.push('--no-optimizations');
   }

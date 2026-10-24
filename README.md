@@ -201,6 +201,10 @@ pnpm install
 # Regenerate QSV node definitions from latest CLI help (if updating QSV commands)
 pnpm run generate:qsv
 
+# Or synchronize, test, and release against new QSV builds (with optional --otp):
+pnpm run sync:qsv --dry-run
+pnpm run sync:qsv --staging --publish --otp 123456
+
 # Build package
 pnpm run build
 

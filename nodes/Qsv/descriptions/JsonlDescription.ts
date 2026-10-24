@@ -62,8 +62,8 @@ export const JsonlDescription: INodeProperties[] = [
       displayName: 'Delimiter',
       name: 'delimiter',
       type: 'string',
-      default: ',',
-      description: 'The delimiter to use when writing CSV data. Must be a single character.',
+      default: '',
+      description: 'The delimiter to use when writing CSV data. Must be a single character. (default: ,)',
     },
     {
       displayName: 'Ignore Errors',

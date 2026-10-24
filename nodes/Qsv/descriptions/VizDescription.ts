@@ -22,6 +22,7 @@ export const VizDescription: INodeProperties[] = [
     default: 'bar',
     options: [
         { name: 'bar', value: 'bar' },
+        { name: 'barpolar', value: 'barpolar' },
         { name: 'box', value: 'box' },
         { name: 'candlestick', value: 'candlestick' },
         { name: 'choropleth', value: 'choropleth' },
@@ -35,6 +36,7 @@ export const VizDescription: INodeProperties[] = [
         { name: 'map', value: 'map' },
         { name: 'ohlc', value: 'ohlc' },
         { name: 'parcats', value: 'parcats' },
+        { name: 'parcoords', value: 'parcoords' },
         { name: 'pie', value: 'pie' },
         { name: 'radar', value: 'radar' },
         { name: 'sankey', value: 'sankey' },
@@ -43,10 +45,11 @@ export const VizDescription: INodeProperties[] = [
         { name: 'smart', value: 'smart' },
         { name: 'splom', value: 'splom' },
         { name: 'sunburst', value: 'sunburst' },
+        { name: 'ternary', value: 'ternary' },
         { name: 'treemap', value: 'treemap' },
         { name: 'violin', value: 'violin' },
     ],
-    description: 'Subcommand to execute. Valid values: bar, box, candlestick, choropleth, contour, funnel, geo, heatmap, histogram, icicle, line, map, ohlc, parcats, pie, radar, sankey, scatter, scatter3d, smart, splom, sunburst, treemap, violin',
+    description: 'Subcommand to execute. Valid values: bar, barpolar, box, candlestick, choropleth, contour, funnel, geo, heatmap, histogram, icicle, line, map, ohlc, parcats, parcoords, pie, radar, sankey, scatter, scatter3d, smart, splom, sunburst, ternary, treemap, violin',
     displayOptions: {
       show: {
         operation: ['viz'],
@@ -94,7 +97,7 @@ export const VizDescription: INodeProperties[] = [
       name: 'agg',
       type: 'string',
       default: '',
-      description: 'How to combine values. For bar/line, aggregate the y values when the x value repeats: one of sum, mean, count, min, max. For treemap/sunburst/icicle, only the additive aggregations apply: count (the default) or sum (which requires --value). For choropleth, how rows sharing a region are combined: sum when --value is given, else count; pass mean for an intensive measure (a density, rate, index or per-capita figure), since summing those is meaningless and the count/sum hover\'s "share of total" line would be too. On a bubble animation (see the slider option), it collapses each entity x frame cell to a single bubble and defaults to mean, the cell centroid; count is rejected there, since a row count is not a position. For smart (with a GeoJSON), how its region map combines the value column per region: sum (the default, and the only one that also gets a rate panel when a denominator is available), mean, min or max; count keeps the row-count map even when every region has the same number of rows, and takes no value column.',
+      description: 'How to combine values. For bar/line, aggregate the y values when the x value repeats: one of sum, mean, count, min, max. For barpolar, the same per category (and series): sum by default, and only count when the y column is omitted. For treemap/sunburst/icicle, only the additive aggregations apply: count (the default) or sum (which requires --value). For choropleth, how rows sharing a region are combined: sum when --value is given, else count; pass mean for an intensive measure (a density, rate, index or per-capita figure), since summing those is meaningless and the count/sum hover\'s "share of total" line would be too. On a bubble animation (see the slider option), it collapses each entity x frame cell to a single bubble and defaults to mean, the cell centroid; count is rejected there, since a row count is not a position. For smart (with a GeoJSON), how its region map combines the value column per region: sum (the default, and the only one that also gets a rate panel when a denominator is available), mean, min or max; count keeps the row-count map even when every region has the same number of rows, and takes no value column.',
     },
     {
       displayName: 'Annotation',
@@ -102,6 +105,13 @@ export const VizDescription: INodeProperties[] = [
       type: 'string',
       default: '',
       description: 'Caption note drawn at the bottom of the plot (e.g. to note a clipped outlier). Cartesian charts only.',
+    },
+    {
+      displayName: 'Area',
+      name: 'area',
+      type: 'boolean',
+      default: false,
+      description: 'For funnel: draw a funnel area, whose stacked sections are sized by each stage\'s share of the total and labeled with its value and percent of the total, instead of bars labeled with the conversion from the previous stage. Its outline always narrows, so a stage larger than the one before it can\'t show as growth; a warning names the first such stage.',
     },
     {
       displayName: 'Bins',
@@ -150,7 +160,7 @@ export const VizDescription: INodeProperties[] = [
       name: 'color',
       type: 'string',
       default: '',
-      description: 'For scatter/scatter3d/map/geo: a numeric column to encode as marker color (a continuous colorscale with a colorbar). For categorical coloring, use the --series option instead. Cannot be combined with --series. In map density mode, this column is the heatmap weight.',
+      description: 'For scatter/scatter3d/ternary/map/geo: a numeric column to encode as marker color (a continuous colorscale with a colorbar). For categorical coloring, use the --series option instead. Cannot be combined with --series. In map density mode, this column is the heatmap weight. For parcoords: the numeric column that colors each line (default: the first axis).',
     },
     {
       displayName: 'Color Scale',
@@ -164,7 +174,7 @@ export const VizDescription: INodeProperties[] = [
       name: 'cols',
       type: 'string',
       default: '',
-      description: 'Columns to use. For heatmap: numeric columns for the correlation matrix (default: all numeric). For radar: the numeric axes to plot. For treemap/sunburst/icicle: the categorical dimensions that form the hierarchy levels, outermost first (e.g. region,category,subcategory). For splom: the numeric columns to cross-plot (default: all numeric). For parcats: the categorical dimensions to flow across (best with 3-4).',
+      description: 'Columns to use. For heatmap: numeric columns for the correlation matrix (default: all numeric). For radar: the numeric axes to plot. For treemap/sunburst/icicle: the categorical dimensions that form the hierarchy levels, outermost first (e.g. region,category,subcategory). For splom: the numeric columns to cross-plot (default: all numeric). For parcats: the categorical dimensions to flow across (best with 3-4). For parcoords: the numeric axes, in order (default: all numeric). For ternary: exactly 3 numeric columns, the a, b and c parts.',
     },
     {
       displayName: 'Dataset Pid',
@@ -172,6 +182,13 @@ export const VizDescription: INodeProperties[] = [
       type: 'string',
       default: '',
       description: 'A persistent identifier (PID) for the dataset - typically a full URL such as a DOI (https://doi.org/10.1234/abc) or other citable link. When set, a "PID" row is added to the metadata table at the top of the Data Schematic. http(s) and mailto values become a clickable link; any other scheme is shown as plain text. HTML output only. Only affects `smart`.',
+    },
+    {
+      displayName: 'Degrees',
+      name: 'degrees',
+      type: 'boolean',
+      default: false,
+      description: 'For barpolar: read --x as an angle in degrees (0 = north, clockwise) and draw each bar at that angle, so gaps in the data stay gaps. Without it, each distinct --x value gets an evenly spaced slot, which suits hours, months and complete degree bins (compass names are placed by bearing either way).',
     },
     {
       displayName: 'Delimiter',
@@ -338,8 +355,8 @@ export const VizDescription: INodeProperties[] = [
       displayName: 'Location Mode',
       name: 'locationMode',
       type: 'string',
-      default: 'iso3',
-      description: 'How --locations values are matched to regions. One of: iso3 (the default, ISO-3166-1 alpha-3 country codes), usa-states (2-letter US state codes), country-names (full country names), geojson-id (match a --geojson feature id).',
+      default: '',
+      description: 'How --locations values are matched to regions. One of: iso3 (ISO-3166-1 alpha-3 country codes), usa-states (2-letter US state codes), country-names (full country names), geojson-id (match a --geojson feature id). Defaults to geojson-id when a --geojson source is given (without --geocode), else iso3.',
     },
     {
       displayName: 'Locations',
@@ -381,7 +398,14 @@ export const VizDescription: INodeProperties[] = [
       name: 'maxCharts',
       type: 'number',
       default: 0,
-      description: 'Maximum number of panels in the Data Schematic. 0 (the default) means auto: draw every eligible column (up to 64), for both HTML and static image export. Up to 8 cartesian panels render as one typed subplot grid; beyond 8, HTML switches to an inline-div grid and static export uses domain-positioned axes to fit one image. Set a positive <n> to cap the panel count instead; eligible columns beyond the cap are reported but not drawn.',
+      description: 'Maximum number of panels in the Data Schematic. 0 (the default) means auto: draw every eligible column (up to 65), for both HTML and static image export. Up to 8 cartesian panels render as one typed subplot grid; beyond 8, HTML switches to an inline-div grid and static export uses domain-positioned axes to fit one image. Set a positive <n> to cap the panel count instead; eligible columns beyond the cap are reported but not drawn.',
+    },
+    {
+      displayName: 'No Daemon Bridge',
+      name: 'noDaemonBridge',
+      type: 'boolean',
+      default: false,
+      description: 'Leave out the qsv-clientd bridge script. By default a `smart` HTML Data Schematic sends one "hello" request to 127.0.0.1 when opened (port 14470, or QSV_CLIENTD_PORT at render time) and, only if a qsv-clientd daemon answers, offers a "Live data" chip to pair with it (approved in a shell) for drill-down, refresh, re-render and read-only queries. With no daemon it does nothing, so the page stays self-contained. Setting QSV_VIZ_NO_DAEMON=1 has the same effect. The page\'s qsv-schematic-source provenance JSON is kept either way, but without the input fingerprint (which costs an extra read of the input) and without the source URL of a dc: input. HTML output only. Only affects `smart`. See https://github.com/dathere/qsv/blob/master/docs/DATA_SCHEMATIC.md',
     },
     {
       displayName: 'No Headers',
@@ -403,6 +427,13 @@ export const VizDescription: INodeProperties[] = [
       type: 'boolean',
       default: false,
       description: 'Omit the "Other (N)" aggregate bar from frequency bar charts. It collects the categories beyond --limit (N = how many distinct categories were rolled up) and is shown by default. When just ONE category is left over, it is charted under its own name instead of as an opaque "Other (1)" bar.',
+    },
+    {
+      displayName: 'No Parcoords',
+      name: 'noParcoords',
+      type: 'boolean',
+      default: false,
+      description: 'Don\'t add the parallel-coordinates panel, which `smart` otherwise draws when 3 or more numeric columns correlate (|r| >= 0.3). Only affects `smart`.',
     },
     {
       displayName: 'No Snap',
@@ -479,14 +510,14 @@ export const VizDescription: INodeProperties[] = [
       name: 'series',
       type: 'string',
       default: '',
-      description: 'Column to split into multiple series (one trace per distinct value). Applies to bar, line, scatter, scatter3d, radar, map and geo.',
+      description: 'Column to split into multiple series (one trace per distinct value). Applies to bar, line, scatter, scatter3d, radar, barpolar (stacked), ternary, map and geo.',
     },
     {
       displayName: 'Size',
       name: 'size',
       type: 'string',
       default: '',
-      description: 'For scatter/scatter3d/map/geo: a numeric column to encode as marker size, producing a bubble chart (values are rescaled to a readable pixel range). Cannot be combined with --series, EXCEPT on an animated scatter (see the --slider option), where the --series column names the entity and this column is the third data variable. In map density mode, this column is the heatmap weight.',
+      description: 'For scatter/scatter3d/ternary/map/geo: a numeric column to encode as marker size, producing a bubble chart (values are rescaled to a readable pixel range). Cannot be combined with --series, EXCEPT on an animated scatter (see the --slider option), where the --series column names the entity and this column is the third data variable. In map density mode, this column is the heatmap weight.',
     },
     {
       displayName: 'Slider',

@@ -35,9 +35,6 @@ export async function executeCount(
   if (options.json === true) {
     args.push('--json');
   }
-  if (options.lowMemory === true) {
-    args.push('--low-memory');
-  }
   if (options.noHeaders === true) {
     args.push('--no-headers');
   }

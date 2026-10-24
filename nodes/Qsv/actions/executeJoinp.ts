@@ -96,9 +96,6 @@ export async function executeJoinp(
   if (options.left_by !== undefined && options.left_by !== '') {
     args.push('--left_by', String(options.left_by));
   }
-  if (options.lowMemory === true) {
-    args.push('--low-memory');
-  }
   if (options.maintainOrder !== undefined && options.maintainOrder !== '') {
     args.push('--maintain-order', String(options.maintainOrder));
   }

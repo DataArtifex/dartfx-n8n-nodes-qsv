@@ -103,7 +103,7 @@ export const GetDescription: INodeProperties[] = [
       name: 'cacheDir',
       type: 'string',
       default: '~/.qsv-cache',
-      description: 'The qsv cache directory. Overrides the QSV_CACHE_DIR env var.',
+      description: 'The qsv cache directory. If the QSV_CACHE_DIR envvar is set, it will be used instead.',
     },
     {
       displayName: 'Ckan Api',

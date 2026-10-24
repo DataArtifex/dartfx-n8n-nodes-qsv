@@ -19,7 +19,7 @@ jobs:
 
       - name: Install QSV binary (Linux)
         run: |
-          curl -fsSL https://github.com/dathere/qsv/releases/download/24.0.0/qsv-24.0.0-x86_64-unknown-linux-musl.zip -o /tmp/qsv.zip
+          curl -fsSL https://github.com/dathere/qsv/releases/download/26.0.0/qsv-26.0.0-x86_64-unknown-linux-musl.zip -o /tmp/qsv.zip
           sudo unzip -o /tmp/qsv.zip qsv -d /usr/local/bin/
           sudo chmod +x /usr/local/bin/qsv
           rm -f /tmp/qsv.zip

@@ -91,7 +91,7 @@ export const FrequencyDescription: INodeProperties[] = [
       name: 'frequencyJsonl',
       type: 'boolean',
       default: false,
-      description: 'Write the complete frequency distribution as a JSONL cache file (FILESTEM.freq.csv.data.jsonl). Requires a non-stdin input file. The cache contains metadata and per-column frequency data. ALL_UNIQUE columns (rowcount == cardinality) get a single ALL_UNIQUE sentinel. HIGH_CARDINALITY columns (cardinality exceeds the smaller of --high-card-threshold/--high-card-pct of rowcount) get a single HIGH_CARDINALITY sentinel. When a valid (fresh) cache already exists, frequency will automatically reuse it instead of recomputing from the CSV. Use --force to regenerate the cache even when it is valid. Cache is NOT used when --ignore-case, --no-trim, or --weight are active, as these change how values are computed.',
+      description: 'Write the complete frequency distribution as a JSONL cache file (FILESTEM.freq.csv.data.jsonl). Requires a non-stdin input file. The cache contains metadata and per-column frequency data. ALL_UNIQUE columns (rowcount == cardinality) get a single ALL_UNIQUE sentinel. HIGH_CARDINALITY columns (cardinality exceeds the smaller of --high-card-threshold/--high-card-pct of rowcount) get a single HIGH_CARDINALITY sentinel. Columns with any value that is not valid UTF-8 get a single NON_UTF8 sentinel, since the cache stores values as UTF-8 text. HIGH_CARDINALITY and NON_UTF8 columns are recomputed when the cache is reused. When a valid (fresh) cache already exists, frequency will automatically reuse it instead of recomputing from the CSV. Use --force to regenerate the cache even when it is valid. Cache is NOT used when --ignore-case, --no-trim, or --weight are active, as these change how values are computed.',
     },
     {
       displayName: 'High Card Pct',
@@ -112,7 +112,7 @@ export const FrequencyDescription: INodeProperties[] = [
       name: 'ignoreCase',
       type: 'boolean',
       default: false,
-      description: 'Ignore case when computing frequencies.',
+      description: 'Ignore case when computing frequencies. The stats cache\'s cardinality is case-sensitive, so it cannot prove that case-folded values are unique. All-unique columns are therefore counted in full instead of being short-circuited to <ALL_UNIQUE> - except Integer columns, which have no letters to fold (unless trimming changes one of their values). On large files with all-unique text columns (e.g. emails), this can use memory proportional to the row count. Exclude such columns with -s if you don\'t need them.',
     },
     {
       displayName: 'Json',
@@ -259,7 +259,7 @@ export const FrequencyDescription: INodeProperties[] = [
       name: 'sketchMethod',
       type: 'string',
       default: 'exact',
-      description: 'Algorithm used to compute the frequency table. Choices: \'exact\' (default) tracks every distinct value in a HashMap; \'frequent_items\' uses the Apache DataSketches Frequent Items (Misra-Gries) sketch to track top-K heavy hitters with bounded error and constant memory. The frequent_items mode rejects asc, weight, ignore-case, no-trim, other-sorted, null-sorted, frequency-jsonl, stats-filter, and json/pretty-json/toon output; the frequency cache is bypassed. Counts are estimates. The flags rank-strategy, lmt-threshold, and unq-limit are silently ignored under this mode (the sketch\'s natural ordering is top-K by estimate descending; tied counts use the sketch\'s hash-table iteration order). The \'Other\' row format diverges from exact: label is the bare other-text (no unique-count suffix since the sketch cannot recover the true count of items not in the top-K); rank is 0 to match the exact convention. Note: \'frequent_items\' requires a little-endian target. Apache DataSketches does not support big-endian platforms (e.g., s390x); on those builds, this choice is rejected.',
+      description: 'Algorithm used to compute the frequency table. Choices: \'exact\' (default) tracks every distinct value in a HashMap; \'frequent_items\' uses the Apache DataSketches Frequent Items (Misra-Gries) sketch to track top-K heavy hitters with bounded error and constant memory. The frequent_items mode rejects asc, weight, ignore-case, no-trim, other-sorted, null-sorted, frequency-jsonl, stats-filter, and json/pretty-json/toon output; the frequency cache is bypassed. Counts are estimates. The flags rank-strategy, lmt-threshold, and unq-limit are silently ignored under this mode (the sketch\'s natural ordering is top-K by estimate descending; tied counts use the sketch\'s hash-table iteration order). The \'Other\' row format diverges from exact: label is the bare other-text (no unique-count suffix since the sketch cannot recover the true count of items not in the top-K); rank is 0 to match the exact convention. Its count is approximate. NULLs are counted exactly, outside the sketch, and are reported as in exact mode (after "Other"). Note: \'frequent_items\' requires a little-endian target. Apache DataSketches does not support big-endian platforms (e.g., s390x); on those builds, this choice is rejected.',
     },
     {
       displayName: 'Stats Filter',

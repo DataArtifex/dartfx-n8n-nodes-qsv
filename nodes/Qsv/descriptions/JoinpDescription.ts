@@ -237,13 +237,6 @@ export const JoinpDescription: INodeProperties[] = [
       description: 'This returns only the rows in the first CSV data set that have a corresponding row in the second data set. The output schema is the same as the first data set.',
     },
     {
-      displayName: 'Low Memory',
-      name: 'lowMemory',
-      type: 'boolean',
-      default: false,
-      description: 'Use low memory mode when parsing CSVs. This will use less memory but will be slower. It will also process the join in streaming mode. Only use this when you get out of memory errors.',
-    },
-    {
       displayName: 'Maintain Order',
       name: 'maintainOrder',
       type: 'string',
@@ -339,7 +332,7 @@ export const JoinpDescription: INodeProperties[] = [
       name: 'streaming',
       type: 'boolean',
       default: false,
-      description: 'When set, the join will be done in a streaming fashion. Only use this when you get out of memory errors.',
+      description: 'Write the join result as it is computed, batch by batch, instead of collecting the whole result in memory first. Use this when the result is too big for memory: it uses less memory but is slower. An --output file is written beside its target and only moved into place if the join succeeds; overwriting an existing file copies the result into it, so it keeps its owner, group, mode and links, and briefly needs disk space for two copies. On stdout, rows are sent as they are computed, so a join that fails part-way leaves its output cut short; check the exit code.',
     },
     {
       displayName: 'Time Format',

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.26.0] - 2026-10-24
+
+### Changed
+
+- **Synchronized with datHere QSV v26.0.0**:
+  - Regenerated all non-interactive QSV operations with updated CLI parameter definitions and tool schemas.
+  - Updated operational descriptions, category hints, and command options.
+
 ## [0.2.1] - 2026-10-09
 
 ### Added

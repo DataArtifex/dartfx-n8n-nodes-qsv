@@ -84,7 +84,7 @@ export const SchemaDescription: INodeProperties[] = [
       name: 'ignoreCase',
       type: 'boolean',
       default: false,
-      description: 'Ignore case when compiling unique values for enum constraints. Do note however that the `validate` command is case-sensitive when validating against enum constraints.',
+      description: 'Ignore case when compiling unique values for enum constraints. String columns are then checked against the enum threshold by their case-insensitive cardinality. As the `validate` command is case-sensitive, the enum & const constraints of String columns are written as equivalent case-insensitive regex patterns instead (e.g. "^(?i:false|true)$"). These use the inline `(?i:...)` modifier, which other JSON Schema validators may not support, e.g. on older JavaScript engines.',
     },
     {
       displayName: 'Memcheck',

@@ -39,6 +39,9 @@ export async function executeGeoconvert(
   const options = (this.getNodeParameter('options', itemIndex, {}) as any) || {};
 
   const args: string[] = ['geoconvert'];
+  if (options.delimiter !== undefined && options.delimiter !== '') {
+    args.push('--delimiter', String(options.delimiter));
+  }
   if (options.geometry !== undefined && options.geometry !== '') {
     args.push('--geometry', String(options.geometry));
   }

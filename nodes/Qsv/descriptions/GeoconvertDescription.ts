@@ -77,6 +77,13 @@ export const GeoconvertDescription: INodeProperties[] = [
     },
     options: [
     {
+      displayName: 'Delimiter',
+      name: 'delimiter',
+      type: 'string',
+      default: '',
+      description: 'The field delimiter for reading CSV input. Must be a single character. (default: ,)',
+    },
+    {
       displayName: 'Geometry',
       name: 'geometry',
       type: 'string',
@@ -102,7 +109,7 @@ export const GeoconvertDescription: INodeProperties[] = [
       name: 'maxLength',
       type: 'number',
       default: 0,
-      description: 'The maximum column length when the output format is CSV. Oftentimes, the geometry column is too long to fit in a CSV file, causing other tools like Python & PostgreSQL to fail. If a column is too long, it will be truncated to the specified length and an ellipsis ("...") will be appended.',
+      description: 'The maximum column length in bytes when the output format is CSV. Oftentimes, the geometry column is too long to fit in a CSV file, causing other tools like Python & PostgreSQL to fail. If a column is too long, it will be truncated to the specified length and an ellipsis ("...") will be appended, so a truncated value is up to 3 bytes longer.',
     },
     ],
   },
